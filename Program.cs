@@ -6,6 +6,7 @@ namespace BattleshipEngine
     {
         private static void Main(string[] args)
         {
+            var eng = new Engine();
         }
     }
 }
