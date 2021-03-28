@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BattleshipEngine.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,20 @@ using System.Threading.Tasks;
 
 namespace BattleshipEngine.Models
 {
-    public class Destroyer : Ship
+    public class Destroyer : IShip
     {
-        public override Direction Direction { get; init; }
-        public override int Length { get; init; } = 2;
-        public override (int col, int row)[] Coords { get; set; }
-        public override bool IsDestroyed { get; set; }
+        private readonly IShipPositioner _positioner;
 
-        public Destroyer()
+        public Destroyer(IShipPositioner positioner, Board board)
         {
-            Coords = new (int col, int row)[Length];
+            _positioner = positioner;
+            Direction = _positioner.DetermineShipDirection();
+            Position = _positioner.GenerateShipPosition(board, this);
         }
+
+        public Direction Direction { get; init; }
+        public int Length { get; init; } = 2;
+        public (int col, int row)[] Position { get; init; }
+        public bool IsDestroyed { get; set; }
     }
 }

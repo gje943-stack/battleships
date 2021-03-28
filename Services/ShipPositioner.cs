@@ -7,31 +7,38 @@ using System.Threading.Tasks;
 
 namespace BattleshipEngine.Services
 {
-    public static class ShipPositioner
+    public class ShipPositioner : IShipPositioner
     {
-        public static Direction DetermineShipDirection()
+        private readonly ICoordsGenerator _generator;
+
+        public ShipPositioner(ICoordsGenerator generator)
+        {
+            _generator = generator;
+        }
+
+        public Direction DetermineShipDirection()
         {
             var rnd = new Random();
             var vals = Enum.GetValues(typeof(Direction));
             return (Direction)vals.GetValue(rnd.Next(vals.Length));
         }
 
-        public static (int, int)[] GenerateRandomValidShipCoords(Board board, Ship ship)
+        public (int, int)[] GenerateShipPosition(Board board, IShip ship)
         {
             while (true)
             {
-                var (col, row) = BoardHelper.SelectRandomSquare(board);
-                var coords = GenerateCoords(col, row, ship.Direction, ship.Length);
-                if (CoordsAreValid(coords, board))
+                var (col, row) = _generator.SelectRandomCoord(board.Columns, board.Rows);
+                var randomPosition = GenerateCoords(col, row, ship.Direction, ship.Length);
+                if (PositionIsValid(randomPosition, board))
                 {
-                    return coords;
+                    return randomPosition;
                 }
             }
         }
 
-        private static bool CoordsAreValid((int col, int row)[] coords, Board board)
+        private bool PositionIsValid((int col, int row)[] position, Board board)
         {
-            foreach (var coord in coords)
+            foreach (var coord in position)
             {
                 if (CoordAlreadyOccupied(board.Ships, coord) ||
                     CoordOutsideBoard(coord, board.Columns, board.Rows))
@@ -42,7 +49,7 @@ namespace BattleshipEngine.Services
             return true;
         }
 
-        private static (int, int)[] GenerateCoords(int col, int row, Direction dir, int shipLength)
+        private (int, int)[] GenerateCoords(int col, int row, Direction dir, int shipLength)
         {
             if (dir == Direction.Horizontal)
             {
@@ -51,7 +58,7 @@ namespace BattleshipEngine.Services
             return CreateVerticalCoords(col, row, shipLength);
         }
 
-        private static (int, int)[] CreateHorizontalCoords(int col, int row, int shipLength)
+        private (int, int)[] CreateHorizontalCoords(int col, int row, int shipLength)
         {
             var coords = new (int, int)[shipLength + 1];
             for (int i = 0; i <= shipLength; i++)
@@ -62,7 +69,7 @@ namespace BattleshipEngine.Services
             return coords;
         }
 
-        private static (int, int)[] CreateVerticalCoords(int col, int row, int shipLength)
+        private (int, int)[] CreateVerticalCoords(int col, int row, int shipLength)
         {
             var coords = new (int, int)[shipLength + 1];
             for (int i = 0; i <= shipLength; i++)
@@ -72,16 +79,16 @@ namespace BattleshipEngine.Services
             return coords;
         }
 
-        private static bool CoordAlreadyOccupied(List<Ship> unavailableCoords, (int, int) proposedCoords)
+        private bool CoordAlreadyOccupied(List<IShip> unavailableCoords, (int, int) proposedCoords)
         {
-            if (unavailableCoords.SelectMany(s => s.Coords).Any(c => c == proposedCoords))
+            if (unavailableCoords.SelectMany(s => s.Position).Any(c => c == proposedCoords))
             {
                 return true;
             }
             return false;
         }
 
-        private static bool CoordOutsideBoard((int col, int row) proposedCoord, int cols, int rows)
+        private bool CoordOutsideBoard((int col, int row) proposedCoord, int cols, int rows)
         {
             if (proposedCoord.col > cols - 1 || proposedCoord.col < 0
                 || proposedCoord.row > rows - 1 || proposedCoord.row < 0)

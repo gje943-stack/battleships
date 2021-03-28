@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BattleshipEngine.Factories;
+using BattleshipEngine.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +8,15 @@ using System.Threading.Tasks;
 
 namespace BattleshipEngine.Models
 {
-    public class Player
+    public class Player : IPlayer
     {
-        public Board Board { get; init; }
-
-        public int PlayerId { get; set; }
-
-        public Player(int rows, int columns, int playerId)
+        public Player(int playerId)
         {
-            Board = new(rows, columns);
-            Board.PositionShips();
+            PlayerId = playerId;
         }
+
+        public IBoard Board { get; set; }
+
+        public int PlayerId { get; init; }
     }
 }
