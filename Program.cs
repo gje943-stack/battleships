@@ -1,5 +1,4 @@
 ﻿using BattleshipEngine.Factories;
-using BattleshipEngine.Providers;
 using BattleshipEngine.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,8 +17,9 @@ namespace BattleshipEngine
                     services.AddTransient<IShipPositioner, ShipPositioner>();
                     services.AddTransient<ICoordsGenerator, CoordsGenerator>();
                     services.AddSingleton<IShipFactory, ShipFactory>();
-                    services.AddTransient<IPlayerProvider, PlayerProvider>();
-                    services.AddTransient<IBoardProvider, BoardProvider>();
+                    services.AddTransient<IPlayerFactory, PlayerFactory>();
+                    services.AddTransient<IBoardFactory, BoardFactory>();
+                    services.AddTransient<IGameDisplay, GameDisplay>();
                 })
                 .Build();
             var app = ActivatorUtilities.GetServiceOrCreateInstance<IEngine>(host.Services);

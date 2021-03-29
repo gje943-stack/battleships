@@ -23,7 +23,7 @@ namespace BattleshipEngine.Services
             return (Direction)vals.GetValue(rnd.Next(vals.Length));
         }
 
-        public (int, int)[] GenerateShipPosition(Board board, IShip ship)
+        public Dictionary<(int, int), ShipStatus> GenerateShipPosition(Board board, IShip ship)
         {
             while (true)
             {
@@ -31,12 +31,12 @@ namespace BattleshipEngine.Services
                 var randomPosition = GenerateCoords(col, row, ship.Direction, ship.Length);
                 if (PositionIsValid(randomPosition, board))
                 {
-                    return randomPosition;
+                    return randomPosition.ToDictionary(p => p, s => ShipStatus.Intact);
                 }
             }
         }
 
-        private bool PositionIsValid((int col, int row)[] position, Board board)
+        private bool PositionIsValid(List<(int, int)> position, Board board)
         {
             foreach (var coord in position)
             {
@@ -49,7 +49,7 @@ namespace BattleshipEngine.Services
             return true;
         }
 
-        private (int, int)[] GenerateCoords(int col, int row, Direction dir, int shipLength)
+        private List<(int, int)> GenerateCoords(int col, int row, Direction dir, int shipLength)
         {
             if (dir == Direction.Horizontal)
             {
@@ -58,9 +58,9 @@ namespace BattleshipEngine.Services
             return CreateVerticalCoords(col, row, shipLength);
         }
 
-        private (int, int)[] CreateHorizontalCoords(int col, int row, int shipLength)
+        private List<(int, int)> CreateHorizontalCoords(int col, int row, int shipLength)
         {
-            var coords = new (int, int)[shipLength + 1];
+            var coords = new List<(int, int)>();
             for (int i = 0; i <= shipLength; i++)
             {
                 coords[i] = (col + i, row);
@@ -69,9 +69,9 @@ namespace BattleshipEngine.Services
             return coords;
         }
 
-        private (int, int)[] CreateVerticalCoords(int col, int row, int shipLength)
+        private List<(int, int)> CreateVerticalCoords(int col, int row, int shipLength)
         {
-            var coords = new (int, int)[shipLength + 1];
+            var coords = new List<(int, int)>();
             for (int i = 0; i <= shipLength; i++)
             {
                 coords[i] = (col, row + i);
@@ -81,7 +81,7 @@ namespace BattleshipEngine.Services
 
         private bool CoordAlreadyOccupied(List<IShip> unavailableCoords, (int, int) proposedCoords)
         {
-            if (unavailableCoords.SelectMany(s => s.Position).Any(c => c == proposedCoords))
+            if (unavailableCoords.SelectMany(s => s.Position.Keys).Any(c => c == proposedCoords))
             {
                 return true;
             }

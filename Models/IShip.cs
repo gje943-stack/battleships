@@ -12,14 +12,19 @@ namespace BattleshipEngine.Models
         Vertical, Horizontal
     }
 
+    public enum ShipStatus
+    {
+        Intact, Hit
+    }
+
     public interface IShip
     {
         public Direction Direction { get; init; }
 
         public int Length { get; init; }
 
-        public (int col, int row)[] Position { get; init; }
+        public Dictionary<(int col, int row), ShipStatus> Position { get; init; }
 
-        public bool IsDestroyed { get; set; }
+        public bool IsSunk();
     }
 }

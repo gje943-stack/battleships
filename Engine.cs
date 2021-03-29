@@ -1,6 +1,5 @@
 ﻿using BattleshipEngine.Factories;
 using BattleshipEngine.Models;
-using BattleshipEngine.Providers;
 using BattleshipEngine.Services;
 using System;
 using System.Collections.Generic;
@@ -12,25 +11,28 @@ namespace BattleshipEngine
 {
     public class Engine : IEngine
     {
-        private readonly IPlayerProvider _playerProvider;
-        private readonly IBoardProvider _boardProvider;
-        private List<IPlayer> Players;
+        private readonly IPlayerFactory _playerFactory;
+        private readonly IGameDisplayFactory _gameDisplayFac;
 
-        public Engine(IPlayerProvider playerProvider, IBoardProvider boardProvider)
+        public List<IPlayer> Players { get; private set; }
+
+        public Engine(IPlayerFactory playerFactory, IGameDisplayFactory gameDisplayFac)
         {
-            _playerProvider = playerProvider;
-            _boardProvider = boardProvider;
-            startGame();
+            _playerFactory = playerFactory;
+            _gameDisplayFac = gameDisplayFac;
         }
 
-        public void startGame(int cols = 8, int rows = 8, int numOfPlayers = 6)
+        public IGameDisplay StartGame(int cols = 8, int rows = 8, int numOfPlayers = 6)
         {
-            Players = _playerProvider.CreatePlayers(numOfPlayers);
-            foreach (var player in Players)
-            {
-                player.Board = _boardProvider.CreateBoard(cols, rows);
-            }
-            Console.ReadLine();
+            Players = _playerFactory.CreatePlayers(numOfPlayers, cols, rows);
+            return _gameDisplayFac.CreateDisplay(Players);
+        }
+
+        public IGameDisplay Shoot(int shotColumn, int shotRow, int playerId)
+        {
+            Players.Find(p => p.PlayerId == playerId)
+                .TakeShot((shotColumn, shotRow));
+            return _gameDisplayFac.CreateDisplay(Players, playerId);
         }
     }
 }

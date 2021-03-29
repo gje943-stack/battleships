@@ -20,7 +20,11 @@ namespace BattleshipEngine.Models
 
         public Direction Direction { get; init; }
         public int Length { get; init; } = 4;
-        public (int col, int row)[] Position { get; init; }
-        public bool IsDestroyed { get; set; }
+        public Dictionary<(int col, int row), ShipStatus> Position { get; init; }
+
+        public bool IsSunk()
+        {
+            return Position.Values.All(status => status == ShipStatus.Hit);
+        }
     }
 }

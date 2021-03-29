@@ -1,10 +1,14 @@
 ﻿using BattleshipEngine.Models;
+using BattleshipEngine.Services;
 using System.Collections.Generic;
 
 namespace BattleshipEngine
 {
     public interface IEngine
     {
-        void startGame(int cols = 8, int rows = 8, int numOfPlayers = 1);
+        List<IPlayer> Players { get; }
+
+        IGameDisplay Shoot(int shotColumn, int shotRow, int playerId);
+        IGameDisplay StartGame(int cols = 8, int rows = 8, int numOfPlayers = 6);
     }
 }

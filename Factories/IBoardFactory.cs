@@ -1,8 +1,8 @@
 ﻿using BattleshipEngine.Models;
 
-namespace BattleshipEngine.Providers
+namespace BattleshipEngine.Factories
 {
-    public interface IBoardProvider
+    public interface IBoardFactory
     {
         IBoard CreateBoard(int cols, int rows);
     }

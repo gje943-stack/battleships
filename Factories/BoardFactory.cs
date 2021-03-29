@@ -1,20 +1,14 @@
-﻿using BattleshipEngine.Factories;
-using BattleshipEngine.Models;
+﻿using BattleshipEngine.Models;
 using BattleshipEngine.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BattleshipEngine.Providers
+namespace BattleshipEngine.Factories
 {
-    public class BoardProvider : IBoardProvider
+    public class BoardFactory : IBoardFactory
     {
         private readonly IShipFactory _shipFac;
         private readonly ICoordsGenerator _generator;
 
-        public BoardProvider(IShipFactory shipFac, ICoordsGenerator generator)
+        public BoardFactory(IShipFactory shipFac, ICoordsGenerator generator)
         {
             _shipFac = shipFac;
             _generator = generator;
