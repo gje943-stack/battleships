@@ -6,6 +6,6 @@ namespace BattleshipEngine.Factories
 {
     public interface IGameDisplayFactory
     {
-        IGameDisplay CreateDisplay(List<IPlayer> players, int idOfPlayerWhoMadeShot = -1);
+        IGameDisplay CreateDisplay(List<IPlayer> players, int idOfPlayerWhoMadeShot = 0);
     }
 }

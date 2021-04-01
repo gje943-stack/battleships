@@ -22,12 +22,9 @@ namespace BattleshipEngine
         {
             _playerFactory = playerFactory;
             _gameDisplayFac = gameDisplayFac;
-            var test = StartGame();
-            var test2 = Shoot(3, 2, 0);
-            Console.ReadLine();
         }
 
-        public IGameDisplay StartGame(int cols = 8, int rows = 8, int numOfPlayers = 1)
+        public IGameDisplay StartGame(int cols = 8, int rows = 8, int numOfPlayers = 2)
         {
             if(numOfPlayers < 0 || numOfPlayers > 2)
             {

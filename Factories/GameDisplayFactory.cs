@@ -17,26 +17,33 @@ namespace BattleshipEngine.Factories
             { CoordStatus.Hit, "X" }
         };
 
-        public IGameDisplay CreateDisplay(List<IPlayer> players, int idOfPlayerWhoMadeShot)
+        public IGameDisplay CreateDisplay(List<IPlayer> players, int idOfPlayerWhoMadeShot = 0)
         {
             return new GameDisplay
             {
-                ShipsLeft = GetShipsLeftToDestroy(players.Find(p => p.PlayerId != idOfPlayerWhoMadeShot)),
+                ShipsLeft = GetShipsLeftToDestroy(players.Find(p => p.PlayerId == idOfPlayerWhoMadeShot)),
                 Result = GetRecentShotResult(players.Find(p => p.PlayerId == idOfPlayerWhoMadeShot)),
                 Boards = GetBoardsInDisplayFormat(players.Select(p => p.Board))
             };
         }
 
-        private int GetShipsLeftToDestroy(IPlayer oppositePlayer)
+        private int GetShipsLeftToDestroy(IPlayer player)
         {
-            var totalShips = oppositePlayer.Board.Ships.Count;
-            var shipsDestroyed = oppositePlayer.Stats.ShipsDestroyed;
+            var totalShips = player.Board.Ships.Count;
+            var shipsDestroyed = player.Stats.ShipsDestroyed;
             return totalShips - shipsDestroyed;
         }
 
         private ShotResult GetRecentShotResult(IPlayer playerWhoMadeShot)
         {
-            return playerWhoMadeShot == null ? ShotResult.NoShotTaken : playerWhoMadeShot.Stats.ShotResults.Last();
+            try
+            {
+                return playerWhoMadeShot.Stats.ShotResults.Last();
+            }
+            catch (InvalidOperationException)
+            {
+                return ShotResult.NoShotTaken;
+            }
         }
 
         // REFACTOR THIS METHOD
