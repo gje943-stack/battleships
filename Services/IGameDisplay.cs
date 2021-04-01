@@ -9,7 +9,7 @@ namespace BattleshipEngine.Services
 
         public int ShipsLeft { get; set; }
 
-        public ShotResult Result { get; set; }
+        public ShotResult? Result { get; set; }
 
     }
 }

@@ -13,21 +13,21 @@ namespace BattleshipEngine.Factories
     {
         private readonly IShipPositioner _positioner;
 
-        public Dictionary<Type, Func<IBoard, IShipPositioner, IShip>> shipCreator { get; init; }
+        public Dictionary<Type, Func<IBoard, IShipPositioner, IShip>> ShipCreator { get; init; }
 
         public List<IShip> test { get; set; }
 
         public ShipFactory(IShipPositioner positioner)
         {
             _positioner = positioner;
-            shipCreator = Assembly.GetExecutingAssembly().GetTypes()
+            ShipCreator = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => typeof(IShip).IsAssignableFrom(t) && t.IsInterface == false)
                 .ToDictionary(t => t, t => new Func<IBoard, IShipPositioner, IShip>((b, p) => (IShip)Activator.CreateInstance(t, new object[] { p, b })));
         }
 
         public List<IShip> CreateAllShips(IBoard bd)
         {
-            return shipCreator.Values
+            return ShipCreator.Values
                 .Select(f => f(bd, _positioner))
                 .ToList();
         }

@@ -1,4 +1,5 @@
 ﻿using BattleshipEngine.Factories;
+using BattleshipEngine.Models;
 using BattleshipEngine.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,6 +21,8 @@ namespace BattleshipEngine
                     services.AddTransient<IPlayerFactory, PlayerFactory>();
                     services.AddTransient<IBoardFactory, BoardFactory>();
                     services.AddTransient<IGameDisplay, GameDisplay>();
+                    services.AddTransient<IPlayerStats, PlayerStats>();
+                    services.AddTransient<IGameDisplayFactory, GameDisplayFactory>();
                 })
                 .Build();
             var app = ActivatorUtilities.GetServiceOrCreateInstance<IEngine>(host.Services);

@@ -63,7 +63,7 @@ namespace BattleshipEngine.Services
             var coords = new List<(int, int)>();
             for (int i = 0; i <= shipLength; i++)
             {
-                coords[i] = (col + i, row);
+                coords.Add((col, row + i));
             }
 
             return coords;
@@ -74,7 +74,7 @@ namespace BattleshipEngine.Services
             var coords = new List<(int, int)>();
             for (int i = 0; i <= shipLength; i++)
             {
-                coords[i] = (col, row + i);
+                coords.Add((col, row + i));
             }
             return coords;
         }

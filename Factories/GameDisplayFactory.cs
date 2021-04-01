@@ -17,7 +17,7 @@ namespace BattleshipEngine.Factories
             { CoordStatus.Hit, "X" }
         };
 
-        public IGameDisplay CreateDisplay(List<IPlayer> players, int idOfPlayerWhoMadeShot = -1)
+        public IGameDisplay CreateDisplay(List<IPlayer> players, int idOfPlayerWhoMadeShot)
         {
             return new GameDisplay
             {
@@ -36,7 +36,7 @@ namespace BattleshipEngine.Factories
 
         private ShotResult GetRecentShotResult(IPlayer playerWhoMadeShot)
         {
-            return playerWhoMadeShot.Stats.ShotResults.Last();
+            return playerWhoMadeShot == null ? ShotResult.NoShotTaken : playerWhoMadeShot.Stats.ShotResults.Last();
         }
 
         // REFACTOR THIS METHOD

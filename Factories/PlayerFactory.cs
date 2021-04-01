@@ -25,7 +25,7 @@ namespace BattleshipEngine.Factories
             for (int i = 0; i < numOfPlayers; i++)
             {
                 var newPlayer = new Player(i, _stats);
-                _boardFactory.CreateBoard(cols, rows);
+                newPlayer.Board = _boardFactory.CreateBoard(cols, rows);
                 players.Add(newPlayer);
             }
             return players;

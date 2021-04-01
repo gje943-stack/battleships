@@ -11,6 +11,6 @@ namespace BattleshipEngine.Services
     {
         public List<List<List<string>>> Boards { get; set; } = new();
         public int ShipsLeft { get; set; }
-        public ShotResult Result { get; set; }
+        public ShotResult? Result { get; set; }
     }
 }

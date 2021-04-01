@@ -7,9 +7,7 @@ namespace BattleshipEngine.Factories
 {
     public interface IShipFactory
     {
-        Dictionary<Type, Func<IBoard, IShipPositioner, IShip>> shipCreator { get; init; }
-
-        //public IShip CreateInstance(IShip ship, IBoard bd);
+        Dictionary<Type, Func<IBoard, IShipPositioner, IShip>> ShipCreator { get; init; }
 
         public List<IShip> CreateAllShips(IBoard bd);
     }

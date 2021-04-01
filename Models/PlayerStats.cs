@@ -8,7 +8,7 @@ namespace BattleshipEngine.Models
 {
     public enum ShotResult
     {
-        Hit, Miss
+        Hit, Miss, NoShotTaken
     }
     public class PlayerStats : IPlayerStats
     {
