@@ -10,5 +10,8 @@ namespace BattleshipEngine
 
         IGameDisplay Shoot(int shotColumn, int shotRow, int playerId);
         IGameDisplay StartGame(int cols = 8, int rows = 8, int numOfPlayers = 6);
+        bool GameIsOver();
+
+        int FindWinningPlayer();
     }
 }

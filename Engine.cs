@@ -44,5 +44,15 @@ namespace BattleshipEngine
                 .TakeShot((shotColumn, shotRow));
             return _gameDisplayFac.CreateDisplay(Players, playerId);
         }
+
+        public bool GameIsOver()
+        {
+            return Players.Any(p => p.Stats.ShipsDestroyed == p.Board.Ships.Count);
+        }
+
+        public int FindWinningPlayer()
+        {
+            return Players.Find(p => p.Stats.ShipsDestroyed == p.Board.Ships.Count).PlayerId;
+        }
     }
 }
