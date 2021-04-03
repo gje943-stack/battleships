@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipEngine.Services
 {
@@ -81,11 +79,7 @@ namespace BattleshipEngine.Services
 
         private bool CoordAlreadyOccupied(List<IShip> unavailableCoords, (int, int) proposedCoords)
         {
-            if (unavailableCoords.SelectMany(s => s.Position.Keys).Any(c => c == proposedCoords))
-            {
-                return true;
-            }
-            return false;
+            return unavailableCoords.SelectMany(s => s.Position.Keys).Any(c => c == proposedCoords);
         }
 
         private bool CoordOutsideBoard((int col, int row) proposedCoord, int cols, int rows)
