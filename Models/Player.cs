@@ -1,21 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleshipEngine.Models
 {
-    public class Player
+    public class Player : IPlayer
     {
-        public Board Board { get; init; }
-
-        public int PlayerId { get; set; }
-
-        public Player(int rows, int columns, int playerId)
+        public IPlayerStats Stats { get; private set; }
+        public Player(int playerId, IPlayerStats stats)
         {
-            Board = new(rows, columns);
-            Board.PositionShips();
+            PlayerId = playerId;
+            Stats = stats;
+        }
+
+        public IBoard Board { get; set; }
+
+        public int PlayerId { get; init; }
+
+        public void TakeShot((int col, int row) targetCoord)
+        {
+            var shipCoords = Board.Ships.SelectMany(s => s.Position.Keys);
+            Stats.NumOfTurns += 1;
+            if (shipCoords.Contains(targetCoord))
+            {
+                ProcessHit(targetCoord);
+            }
+            else
+            {
+                ProcessMiss(targetCoord);
+            }
+        }
+
+        private void ProcessMiss((int col, int row) coord)
+        {
+            Board.Coords[coord] = CoordStatus.Missed;
+            Stats.ShotResults.Add(ShotResult.Miss);
+        }
+
+        private void ProcessHit((int, int) targetCoord)
+        {
+            Board.Coords[targetCoord] = CoordStatus.Hit;
+            Stats.ShotResults.Add(ShotResult.Hit);
+            var shipToHit = Board.Ships.Find(s => s.Position.ContainsKey(targetCoord));
+            shipToHit.Position[targetCoord] = ShipStatus.Hit;
+            if (shipToHit.IsSunk())
+            {
+                Stats.ShipsDestroyed += 1;
+            } 
         }
     }
 }

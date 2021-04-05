@@ -1,4 +1,5 @@
-﻿using BattleshipEngine.Services;
+﻿using BattleshipEngine.Factories;
+using BattleshipEngine.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,42 +8,28 @@ using System.Threading.Tasks;
 
 namespace BattleshipEngine.Models
 {
-    public enum SquareStatus
+    public enum CoordStatus
     {
         Untouched,
         Missed,
         Hit
     }
 
-    public class Board
+    public class Board : IBoard
     {
-        public int Rows { get; set; }
+        public int Rows { get; init; }
 
-        public int Columns { get; set; }
+        public int Columns { get; init; }
 
-        public Dictionary<(int row, int col), SquareStatus> Coords { get; set; }
+        public Dictionary<(int row, int col), CoordStatus> Coords { get; set; }
 
-        public List<Ship> Ships { get; init; }
+        public List<IShip> Ships { get; set; } = new();
 
-        public Board(int rows, int columns)
+        public Board(int columns, int rows, Dictionary<(int row, int col), CoordStatus> coords)
         {
-            Rows = rows;
             Columns = columns;
-            Coords = BoardHelper.GenerateBoard(Rows, Columns);
-            Ships = new List<Ship>
-            {
-                new Cruiser(),
-                new Battleship(),
-                new Destroyer()
-            };
-        }
-
-        public void PositionShips()
-        {
-            foreach (var ship in Ships)
-            {
-                ship.Coords = ShipPositioner.GenerateRandomValidShipCoords(this, ship);
-            }
+            Rows = rows;
+            Coords = coords;
         }
     }
 }

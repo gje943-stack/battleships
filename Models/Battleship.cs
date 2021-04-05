@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 
 namespace BattleshipEngine.Models
 {
-    public class Battleship : Ship
+    public class Battleship : IShip
     {
-        public override Direction Direction { get; init; }
-        public override int Length { get; init; } = 4;
-        public override (int col, int row)[] Coords { get; set; }
-        public override bool IsDestroyed { get; set; }
+        private readonly IShipPositioner _positioner;
 
-        public Battleship()
+        public Battleship(IShipPositioner positioner, Board board)
         {
-            Coords = new (int col, int row)[Length];
+            _positioner = positioner;
+            Direction = _positioner.DetermineShipDirection();
+            Position = _positioner.GenerateShipPosition(board, this);
+        }
+
+        public Direction Direction { get; init; }
+        public int Length { get; init; } = 4;
+        public Dictionary<(int col, int row), ShipStatus> Position { get; init; }
+
+        public bool IsSunk()
+        {
+            return Position.Values.All(status => status == ShipStatus.Hit);
         }
     }
 }

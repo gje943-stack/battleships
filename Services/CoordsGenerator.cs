@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 
 namespace BattleshipEngine.Services
 {
-    public static class BoardHelper
+    public class CoordsGenerator : ICoordsGenerator
     {
-        public static (int col, int row) SelectRandomSquare(Board board)
+        public (int col, int row) SelectRandomCoord(int cols, int rows)
         {
             var rnd = new Random();
-            int randomRow = rnd.Next(board.Rows);
-            int randomCol = rnd.Next(board.Columns);
+            int randomRow = rnd.Next(rows);
+            int randomCol = rnd.Next(cols);
             return (randomCol, randomRow);
         }
 
-        public static Dictionary<(int col, int row), SquareStatus> GenerateBoard(int rows, int columns)
+        public Dictionary<(int col, int row), CoordStatus> GenerateCoords(int columns, int rows)
         {
-            var res = new Dictionary<(int col, int row), SquareStatus>();
+            var res = new Dictionary<(int col, int row), CoordStatus>();
             for (int row = 0; row < rows; row++)
             {
                 for (int col = 0; col < columns; col++)
                 {
-                    res.Add((col, row), SquareStatus.Untouched);
+                    res.Add((col, row), CoordStatus.Untouched);
                 }
             }
             return res;
